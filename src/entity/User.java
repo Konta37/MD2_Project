@@ -19,12 +19,12 @@ public class User implements IOData {
     private String address;
     private Date createDate;
     private Date updateDate;
-    private boolean isDelete; //Account is deleted true-active false-be deleted
+    private Byte isDelete; //Account is deleted 1-active 0-be deleted
 
     public User() {
     }
 
-    public User(int userId, String userName, String email, String fullName, boolean status, String password, String avatar, String phone, String address, Date createDate, Date updateDate, boolean isDelete) {
+    public User(int userId, String userName, String email, String fullName, boolean status, String password, String avatar, String phone, String address, Date createDate, Date updateDate, Byte isDelete) {
         this.userId = userId;
         this.userName = userName;
         this.email = email;
@@ -127,28 +127,60 @@ public class User implements IOData {
         this.updateDate = updateDate;
     }
 
-    public boolean isDelete() {
+    public Byte isDelete() {
         return isDelete;
     }
 
-    public void setDelete(boolean delete) {
+    public void setDelete(Byte delete) {
         isDelete = delete;
     }
 
 
     @Override
     public void inputData() {
-
+        Scanner sc = new Scanner(System.in);
+        this.userId = inputUserId();
+        this.userName = inputUserName(sc);
+        this.email = inputEmail(sc);
+        this.fullName = inputFullName(sc);
+        this.status = inputStatus(sc);
+        this.password = inputPassword(sc);
+        this.avatar = inputAvatar(sc);
+        this.phone = inputPhone(sc);
+        this.address = inputAddress(sc);
+        this.createDate = inputCreateDate(sc);
+        this.updateDate = inputUpdateDate(sc);
+        this.isDelete = inputDelete(sc);
     }
 
     @Override
     public void displayData() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String isDel = "";
+        if (isDelete == 1) {
+            isDel = "Active";
+        }else if (isDelete == 0) {
+            isDel = "Deleted";
+        }
 
+        String format = "| %-15s | %-20s | %-30s | %-20s | %-10s | %-20s | %-20s | %-13s | %-30s | %-10s | %-10s | %-10s |\n";
+        String separator = "+-----------------+----------------------+--------------------------------+----------------------+------------+----------------------+----------------------+---------------+--------------------------------+------------+------------+------------+\n";
+
+        System.out.print(separator);
+        System.out.format(format, "User ID", "User Name", "Email", "Full Name", "Status", "Password", "Avatar", "Phone", "Address", "Create Date", "Update Date", "Is Deleted");
+        System.out.print(separator);
+        System.out.format(format, userId, userName, email, fullName, status, password, avatar, phone, address,
+                (createDate != null ? dateFormat.format(createDate) : "N/A"),
+                (updateDate != null ? dateFormat.format(updateDate) : "N/A"),
+                (isDel));
+        System.out.print(separator);
     }
 
     private int inputUserId() {
         int max = -1;
+        if (UserService.userList.isEmpty()){
+            return 0;
+        }
         for (int i = 0; i < UserService.userList.size(); i++) {
             if (UserService.userList.get(i).getUserId() > max) {
                 max = UserService.userList.get(i).getUserId();
@@ -179,13 +211,104 @@ public class User implements IOData {
                     System.err.println("Username already exist. Try an other one!");
                 }
             }else {
-                System.err.println("Invalid user name (6-100 characters)");
+                System.err.println("Invalid user name (6-100 characters). Try an other one!");
             }
         }while (true);
     }
 
-//    public String inputEmail(Scanner sc) {
-//        System.out.println("Enter email: ");
-//        String regex =
-//    }
+    public String inputEmail(Scanner sc) {
+        System.out.println("Enter email: ");
+        String regex = "^[a-zA-Z0-9._%+-]+@gmail\\.com$";
+        do {
+            String email = sc.nextLine();
+            if (email.matches(regex)) {
+                return email;
+            }else {
+                System.err.println("Invalid email address (xxx@gmail.com). Try an other one!");
+            }
+        }while (true);
+    }
+
+    public String inputFullName(Scanner sc) {
+        System.out.println("Enter full name: ");
+        do {
+            String fullName = sc.nextLine();
+            if(!fullName.isEmpty()){
+                return fullName;
+            }else {
+                System.err.println("Invalid full name (can not empty). Try an other one!");
+            }
+        }while (true);
+    }
+
+    public boolean inputStatus(Scanner sc) {
+        System.out.println("Enter status: ");
+        do {
+            String status = sc.nextLine();
+            if (status.equalsIgnoreCase("true") || status.equalsIgnoreCase("false")) {
+                return Boolean.parseBoolean(status);
+            }else {
+                System.err.println("Invalid status value (true/false). Try an other one!");
+            }
+        }while (true);
+    }
+
+    public String inputPassword(Scanner sc) {
+        System.out.println("Enter password: ");
+        do {
+            String pass = sc.nextLine();
+            if(pass.length()>=5 && pass.length()<=20){
+                return pass;
+            }else {
+                System.err.println("Invalid password (6-20 characters). Try an other one!");
+            }
+        }while (true);
+    }
+
+    public String inputAvatar(Scanner sc) {
+        System.out.println("Enter avatar: ");
+        return sc.nextLine();
+    }
+
+    public String inputPhone(Scanner sc) {
+        System.out.println("Enter phone number: ");
+        String regex = "0\\d{8}";
+        do {
+            String phone = sc.nextLine();
+            if (phone.matches(regex)) {
+                boolean isExist = false;
+                for (int i = 0; i< UserService.userList.size(); i++) {
+                    if (UserService.userList.get(i).getPhone().equalsIgnoreCase(phone)) {
+                        isExist = true;
+                        break;
+                    }
+                }
+                if (!isExist) {
+                    return phone;
+                }else {
+                    System.err.println("Phone number already exist. Try an other one!");
+                }
+                return phone;
+            }else {
+                System.err.println("Invalid phone number (0xxxxxxxx) (9 number). Try an other one!");
+            }
+        }while (true);
+    }
+
+    public String inputAddress(Scanner sc) {
+        System.out.println("Enter address: ");
+        return sc.nextLine();
+    }
+
+    public Date inputCreateDate(Scanner sc) {
+        return new Date();
+    }
+
+    public Date inputUpdateDate(Scanner sc) {
+        return new Date();
+    }
+
+    public Byte inputDelete(Scanner sc) {
+        return 1;
+    }
 }
