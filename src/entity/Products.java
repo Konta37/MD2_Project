@@ -4,11 +4,15 @@ import feature.service.CategoryService;
 import feature.service.ProductService;
 import utils.IOData;
 
+import java.io.Serializable;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Scanner;
 import java.util.UUID;
 
-public class Products implements IOData {
+public class Products implements IOData, Serializable {
     private int productId;
     private String sku;
     private String productName;
@@ -133,11 +137,19 @@ public class Products implements IOData {
 
     @Override
     public void displayData() {
-        System.out.printf("%-12s %-12s %-20s %-10s %-12s %-15s\n", "Product ID", "SKU", "Product Name", "Price", "Stock Qty", "Category ID");
-        System.out.printf("%-12d %-12s %-20s %-10.2f %-12d %-15d\n", productId, sku, productName, unitPrice, stockQuantity, categoryId);
+        // Currency formatter for VND
+        NumberFormat vndFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+        //date format
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        String format = "| %-12s | %-40s | %-20s | %-20s | %-12s |\n";
+        String separator = "+--------------+------------------------------------------+----------------------+----------------------+--------------+\n";
 
-        System.out.printf("%-12s %-12s %-20s %-10s\n", "Description", "Product Image", "Date Created", "Date Updated");
-        System.out.printf("%-12s %-12s %-20s %-10s\n", description, productImage, dateCreated.toString(), dateUpdated.toString());
+        System.out.printf(separator);
+        System.out.format(format, "Product ID", "SKU", "Product Name", "Price", "Stock Qty");
+        System.out.format(format, productId, sku, productName, vndFormat.format(unitPrice), stockQuantity);
+
+        System.out.format(format, "Category ID", "Description", "Product Image", "Date Created", "Date Updated");
+        System.out.format(format, categoryId, description, productImage, sdf.format(dateCreated), sdf.format(dateUpdated));
     }
 
     private int inputProductId() {
@@ -161,7 +173,7 @@ public class Products implements IOData {
     public String inputSku() {
         // Tạo một UUID ngẫu nhiên
         UUID sku;
-        String skuString="";
+        String skuString = "";
         boolean isExist = false;
         do {
             // Tạo một UUID ngẫu nhiên
@@ -209,12 +221,12 @@ public class Products implements IOData {
         return sc.nextLine();
     }
 
-    public double inputUnitPrice(Scanner sc){
+    public double inputUnitPrice(Scanner sc) {
         System.out.println("Enter unit price: ");
         do {
             String input = sc.nextLine();
             try {
-                if (Double.parseDouble(input) >0) {
+                if (Double.parseDouble(input) > 0) {
                     return Double.parseDouble(input);
                 } else {
                     System.err.println("Input must be > 0. Try again.");
@@ -222,10 +234,10 @@ public class Products implements IOData {
             } catch (NumberFormatException e) {
                 System.err.println("Input value is wrong. Try again.");
             }
-        }while (true);
+        } while (true);
     }
 
-    public int inputStockQuantity(Scanner sc){
+    public int inputStockQuantity(Scanner sc) {
         System.out.println("Enter stock quantity: ");
         do {
             String input = sc.nextLine();
@@ -238,42 +250,42 @@ public class Products implements IOData {
             } catch (NumberFormatException e) {
                 System.err.println("Input value is wrong. Try again.");
             }
-        }while (true);
+        } while (true);
     }
 
-    public String inputImage(Scanner sc){
+    public String inputImage(Scanner sc) {
         System.out.println("Enter product image: ");
         return sc.nextLine();
     }
 
-    public int inputCateId(Scanner sc){
+    public int inputCateId(Scanner sc) {
         System.out.println("Enter category id to add: ");
         do {
             String input = sc.nextLine();
             try {
                 boolean isExits = false;
-                for (int i = 0; i< CategoryService.categoryList.size();i++){
-                    if (CategoryService.categoryList.get(i).getCategoryId() == Integer.parseInt(input)){
+                for (int i = 0; i < CategoryService.categoryList.size(); i++) {
+                    if (CategoryService.categoryList.get(i).getCategoryId() == Integer.parseInt(input)) {
                         isExits = true;
                         break;
                     }
                 }
-                if (isExits){
+                if (isExits) {
                     return Integer.parseInt(input);
-                }else {
+                } else {
                     System.err.println("Can't find product with that id. Try again.");
                 }
             } catch (NumberFormatException e) {
                 System.err.println("Input value is wrong. Try again.");
             }
-        }while (true);
+        } while (true);
     }
 
-    public Date inputDateCreated(){
+    public Date inputDateCreated() {
         return new Date();
     }
 
-    public Date inputDateUpdated(){
+    public Date inputDateUpdated() {
         return new Date();
     }
 }

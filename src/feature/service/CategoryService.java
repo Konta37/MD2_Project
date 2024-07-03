@@ -34,11 +34,22 @@ public class CategoryService implements ICategoryFeature {
     public void deleteById(int idDelete) {
         int indexDelete = findIndexById(idDelete);
         if (indexDelete >= 0) {
-            categoryList.remove(indexDelete);
-            System.out.println("Đã xóa thành công");
-            IOFile.writeToFile(IOFile.PATH_CATEGORY,categoryList);
+            boolean isExist = false;
+            for (int i = 0; i < ProductService.productsList.size(); i++) {
+                if (ProductService.productsList.get(i).getCategoryId() == idDelete) {
+                    isExist = true;
+                    break;
+                }
+            }
+            if (!isExist) {
+                categoryList.remove(indexDelete);
+                System.out.println("Delete successfully");
+                IOFile.writeToFile(IOFile.PATH_CATEGORY,categoryList);
+            }else {
+                System.out.println("Can't delete category. This category already exits in product list. Try again");
+            }
         } else {
-            System.err.println("Không tồn tại id = " + idDelete);
+            System.err.println("Can't find category with id = " + idDelete);
         }
     }
 

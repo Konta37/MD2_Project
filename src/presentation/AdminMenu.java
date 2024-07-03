@@ -1,13 +1,16 @@
 package presentation;
 
 import entity.Category;
+import entity.Products;
 import feature.service.CategoryService;
+import feature.service.ProductService;
 import utils.IOFile;
 
 import java.util.Scanner;
 
 public class AdminMenu {
     static CategoryService categoryService = new CategoryService();
+    static ProductService productService = new ProductService();
     public static void adminMenu(Scanner sc) {
         do {
             System.out.println("➢ ===== ADMIN MENU =====");
@@ -124,7 +127,6 @@ public class AdminMenu {
         System.out.println("Enter Category ID to delete: ");
         int idDelete = inputNumber(sc);
         categoryService.deleteById(idDelete);
-        System.out.println("Finish delete");
     }
     public static void searchCategoriesById(Scanner sc) {
         System.out.println("Enter Category ID to search: ");
@@ -140,8 +142,26 @@ public class AdminMenu {
         System.out.print(separator);
         System.out.println("Finish search Category by ID");
     }
-    public static void addNewProducts(Scanner sc) {}
-    public static void showAllProducts(Scanner sc) {}
+    public static void addNewProducts(Scanner sc) {
+        System.out.println("Enter number of Products you want to add: ");
+        int number = inputNumber(sc);
+        for (int i = 0; i < number; i++) {
+            Products products = new Products();
+            products.inputData();
+            productService.saveOrUpdate(products);
+        }
+    }
+    public static void showAllProducts(Scanner sc) {
+        if (ProductService.productsList.isEmpty()) {
+            System.err.println("Empty Product List");
+            return;
+        }
+        // method referance
+        String format = "| %-12s | %-40s | %-20s | %-20s | %-12s |\n";
+        String separator = "+--------------+------------------------------------------+----------------------+----------------------+--------------+\n";
+        ProductService.productsList.forEach(Products::displayData);
+        System.out.print(separator);
+    }
 
     public static int inputNumber(Scanner scanner) {
         do {
