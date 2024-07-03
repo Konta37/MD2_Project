@@ -137,37 +137,37 @@ public class Products implements IOData, Serializable {
 
     @Override
     public void displayData() {
-        // Currency formatter for VND
-        NumberFormat vndFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
-        //date format
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        String format = "| %-12s | %-40s | %-20s | %-20s | %-12s |\n";
-        String separator = "+--------------+------------------------------------------+----------------------+----------------------+--------------+\n";
+        boolean isActive = categoryIsActive();
+        //check is Active is true -> product can be shown. And reverse
+        if (isActive){
+            // Currency formatter for VND
+            NumberFormat vndFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+            //date format
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            String format = "| %-12s | %-40s | %-20s | %-20s | %-12s |\n";
+            String separator = "+--------------+------------------------------------------+----------------------+----------------------+--------------+\n";
 
-        System.out.printf(separator);
-        System.out.format(format, "Product ID", "SKU", "Product Name", "Price", "Stock Qty");
-        System.out.format(format, productId, sku, productName, vndFormat.format(unitPrice), stockQuantity);
+            System.out.printf(separator);
+            System.out.format(format, "Product ID", "SKU", "Product Name", "Price", "Stock Qty");
+            System.out.format(format, productId, sku, productName, vndFormat.format(unitPrice), stockQuantity);
 
-        System.out.format(format, "Category ID", "Description", "Product Image", "Date Created", "Date Updated");
-        System.out.format(format, categoryId, description, productImage, sdf.format(dateCreated), sdf.format(dateUpdated));
+            System.out.format(format, "Category ID", "Description", "Product Image", "Date Created", "Date Updated");
+            System.out.format(format, categoryId, description, productImage, sdf.format(dateCreated), sdf.format(dateUpdated));
+        }
     }
 
     private int inputProductId() {
-        int max = -1;
-        if (!ProductService.productsList.isEmpty()) {
+        int max = 0;
+        if (ProductService.productsList.isEmpty()) {
             return 0;
         }
 
         for (int i = 0; i < ProductService.productsList.size(); i++) {
-            if (ProductService.productsList.get(i).getProductId() >= max) {
+            if (ProductService.productsList.get(i).getProductId() > max) {
                 max = ProductService.productsList.get(i).getProductId();
             }
         }
-        if (max >= 0) {
-            return max + 1;
-        } else {
-            return 0;
-        }
+        return max + 1;
     }
 
     public String inputSku() {
@@ -287,5 +287,14 @@ public class Products implements IOData, Serializable {
 
     public Date inputDateUpdated() {
         return new Date();
+    }
+
+    public boolean categoryIsActive(){
+        for (Category category : CategoryService.categoryList) {
+            if (category.getCategoryId() == this.categoryId) {
+                return category.isStatus();
+            }
+        }
+        return true;
     }
 }

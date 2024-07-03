@@ -128,7 +128,7 @@ public class Orders implements IOData {
 
     private int inputOrderId() {
         int max = 0;
-        if (!OrderService.ordersList.isEmpty()) {
+        if (OrderService.ordersList.isEmpty()) {
             return 0;
         }
 

@@ -12,7 +12,7 @@ public class GeneralMenu {
             System.out.println("4. ");
             System.out.println("5. ");
             System.out.println("6. ");
-            System.out.println("7. EXIT");
+            System.out.println("7. Back");
             System.out.println("Your choice: ");
             int choose;
             try {
