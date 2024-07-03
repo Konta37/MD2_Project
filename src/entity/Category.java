@@ -1,11 +1,12 @@
 package entity;
 
-import feature.CategoryService;
+import feature.service.CategoryService;
 import utils.IOData;
 
+import java.io.Serializable;
 import java.util.Scanner;
 
-public class Category implements IOData {
+public class Category implements IOData, Serializable {
     private int categoryId;
     private String categoryName;
     private String description;
@@ -68,27 +69,20 @@ public class Category implements IOData {
         String separator = "+--------------+----------------------+--------------------------------+------------+\n";
 
         System.out.print(separator);
-        System.out.format(format, "Category ID", "Category Name", "Description", "Status");
-        System.out.print(separator);
-        System.out.format(format, categoryId, categoryName, description, status);
-        System.out.print(separator);
+        System.out.format(format, categoryId, categoryName, description, status? "Active":"Inactive");
     }
 
     private int inputCateId(){
-        int max=-1;
+        int max=0;
         if (CategoryService.categoryList.isEmpty()){
-            return 0;
+            return 1;
         }
-        for(int i = 1; i< CategoryService.categoryList.size(); i++){
+        for(int i = 0; i< CategoryService.categoryList.size(); i++){
             if(CategoryService.categoryList.get(i).getCategoryId()>max){
                 max=CategoryService.categoryList.get(i).getCategoryId();
             }
         }
-        if(max!=-1){
-            return max+1;
-        }else {
-            return 0;
-        }
+        return max+1;
     }
 
     public String inputCategoryName(Scanner sc){

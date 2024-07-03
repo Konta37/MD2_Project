@@ -1,15 +1,22 @@
+import java.util.Scanner;
 import java.util.UUID;
 
 public class Main {
     public static void main(String[] args) {
-        // Tạo một UUID ngẫu nhiên
-        UUID sku = UUID.randomUUID();
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter a string: ");
+        String input = sc.nextLine();
 
-        // Chuyển đổi UUID thành chuỗi
-        String skuString = sku.toString();
+        if (isValidInput(input)) {
+            System.out.println("Valid input.");
+        } else {
+            System.err.println("Invalid input (should not contain special characters).");
+        }
+    }
 
-        // In ra SKU
-        System.out.println("SKU: " + skuString);
-
+    public static boolean isValidInput(String input) {
+        // Regex pattern to disallow special characters
+        String regex = "^[a-zA-Z0-9 ]+$";  // Allows alphanumeric characters and spaces
+        return input.matches(regex);
     }
 }

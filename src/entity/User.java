@@ -1,6 +1,6 @@
 package entity;
 
-import feature.UserService;
+import feature.service.UserService;
 import utils.IOData;
 
 import java.text.SimpleDateFormat;
@@ -177,7 +177,7 @@ public class User implements IOData {
     }
 
     private int inputUserId() {
-        int max = -1;
+        int max = 0;
         if (UserService.userList.isEmpty()){
             return 0;
         }
@@ -186,11 +186,7 @@ public class User implements IOData {
                 max = UserService.userList.get(i).getUserId();
             }
         }
-        if (max == -1) {
-            return 0;
-        } else {
-            return max + 1;
-        }
+        return max + 1;
     }
 
     public String inputUserName(Scanner sc) {
@@ -222,6 +218,18 @@ public class User implements IOData {
         do {
             String email = sc.nextLine();
             if (email.matches(regex)) {
+                boolean isExist = false;
+                for (int i = 0; i< UserService.userList.size(); i++){
+                    if (UserService.userList.get(i).getEmail().equals(email)) {
+                        isExist = true;
+                        break;
+                    }
+                }
+                if (!isExist) {
+                    return email;
+                }else {
+                    System.err.println("Email already exist. Try an other one!");
+                }
                 return email;
             }else {
                 System.err.println("Invalid email address (xxx@gmail.com). Try an other one!");
