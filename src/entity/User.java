@@ -3,11 +3,12 @@ package entity;
 import feature.service.UserService;
 import utils.IOData;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 
-public class User implements IOData {
+public class User implements IOData, Serializable {
     private int userId;
     private String userName;
     private String email;
@@ -305,7 +306,14 @@ public class User implements IOData {
 
     public String inputAddress(Scanner sc) {
         System.out.println("Enter address: ");
-        return sc.nextLine();
+        do {
+            String input = sc.nextLine();
+            if (!input.isEmpty()) {
+                return input;
+            }else {
+                System.err.println("Input address is empty. Try an other one!");
+            }
+        }while (true);
     }
 
     public Date inputCreateDate(Scanner sc) {

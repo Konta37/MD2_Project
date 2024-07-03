@@ -6,14 +6,13 @@ public class UserMenu {
     public static void userMenu(Scanner sc) {
         do {
             System.out.println("➢ ===== USER MENU =====");
-            System.out.println("1. Add number of Categories");
-            System.out.println("2. Show all Categories");
-            System.out.println("3. Edit Category");
-            System.out.println("4. Delete Category");
-            System.out.println("5. Search Category by ID");
-            System.out.println("6. Add number of Products");
-            System.out.println("7. Show all Products");
-            System.out.println("8. EXIT");
+            System.out.println("1. Show Address User by Address ID");
+            System.out.println("2. Show all Address Users");
+            System.out.println("3. Delete Address User by Address ID");
+            System.out.println("4. Add new Address User");
+            System.out.println("5. Update User Information by User ID");
+            System.out.println("6. Show User Information by User ID");
+            System.out.println("7. Back");
             System.out.println("Your choice: ");
             int choose;
             try {
@@ -36,9 +35,8 @@ public class UserMenu {
                 case 6:
                     break;
                 case 7:
-                    break;
-                case 8:
-                    System.exit(0);
+                    System.out.println("Exit User Menu");
+                    return;
                 default:
                     System.out.println("Invalid choice. Try again.");
             }

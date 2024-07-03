@@ -7,6 +7,12 @@ import java.util.List;
 public class IOFile {
     public static final String PATH_CATEGORY = "src/data/category.txt";
     public static final String PATH_PRODUCT = "src/data/product.txt";
+    public static final String PATH_ROLE = "src/data/role.txt";
+    public static final String PATH_USER = "src/data/user.txt";
+    public static final String PATH_ADDRESS = "src/data/address.txt";
+    public static final String PATH_CART = "src/data/cart.txt";
+    public static final String PATH_WISHLIST = "src/data/wishlist.txt";
+
 
     public static <T> void writeToFile(String path, List<T> list) {
         // input - vào trương trình

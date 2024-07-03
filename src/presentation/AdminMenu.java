@@ -2,8 +2,11 @@ package presentation;
 
 import entity.Category;
 import entity.Products;
+import entity.Role;
+import entity.RoleName;
 import feature.service.CategoryService;
 import feature.service.ProductService;
+import feature.service.RoleService;
 import utils.IOFile;
 
 import java.util.Scanner;
@@ -11,6 +14,7 @@ import java.util.Scanner;
 public class AdminMenu {
     static CategoryService categoryService = new CategoryService();
     static ProductService productService = new ProductService();
+    static RoleService roleService = new RoleService();
 
     public static void adminMenu(Scanner sc) {
         do {
@@ -19,7 +23,8 @@ public class AdminMenu {
             System.out.println("2. Product Menu");
             System.out.println("3. User Menu");
             System.out.println("4. Order Menu");
-            System.out.println("5. Back");
+            System.out.println("5. Show all role");
+            System.out.println("6. Back");
             System.out.println("Your choice: ");
             int choose;
             try {
@@ -42,6 +47,9 @@ public class AdminMenu {
                     orderMenu(sc);
                     break;
                 case 5:
+                    showAllRoles();
+                    break;
+                case 6:
                     System.out.println("Exit admin menu.");
                     return;
                 default:
@@ -101,7 +109,8 @@ public class AdminMenu {
             System.out.println("3. Edit Products");
             System.out.println("4. Delete Products");
             System.out.println("5. Search Products by ID");
-            System.out.println("6. Back");
+            System.out.println("6. Search Products by Name");
+            System.out.println("7. Back");
             System.out.println("Your choice: ");
             int choose;
             try {
@@ -127,6 +136,9 @@ public class AdminMenu {
                     searchProductById(sc);
                     break;
                 case 6:
+                    searchProductByName(sc);
+                    break;
+                case 7:
                     System.out.println("Exit product menu.");
                     return;
                 default:
@@ -338,6 +350,7 @@ public class AdminMenu {
         System.out.print(separator);
         System.out.println("Finish search Product by ID");
     }
+
     public static void searchProductByName(Scanner sc) {
         System.out.println("Enter Product Name to search: ");
         String separator = "+--------------+------------------------------------------+----------------------+----------------------+--------------+\n";
@@ -345,20 +358,39 @@ public class AdminMenu {
         for (int i = 0; i < ProductService.productsList.size(); i++) {
             if (ProductService.productsList.get(i).getProductName().contains(productName)) {
                 ProductService.productsList.get(i).displayData();
-                System.out.print(separator);
             }
         }
+        System.out.print(separator);
         System.out.println("Finish search Product by Name");
     }
+
     public static void showAllUsers() {}
-    public static void showAllRoles() {}
+
+    public static void showAllRoles() {
+        for (Role role : RoleService.roleList) {
+            role.displayData();
+        }
+    }
+
+
+    //in case you want to add
+    public static void addRole(Scanner sc){
+        System.out.println("Enter number of Role you want to add: ");
+        int number = inputNumber(sc);
+        for (int i = 0; i < number; i++) {
+            Role role = new Role();
+            role.inputData();
+            roleService.saveOrUpdate(role);
+        }
+
+    }
 
     public static int inputNumber(Scanner scanner) {
         do {
             try {
                 return Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException e) {
-                System.err.println("Vui lòng nhập số");
+                System.err.println("Please enter number. Try again.");
             }
         } while (true);
     }
