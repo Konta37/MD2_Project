@@ -164,8 +164,8 @@ public class User implements IOData, Serializable {
             isDel = "Deleted";
         }
 
-        String format = "| %-15s | %-20s | %-30s | %-20s | %-10s | %-20s | %-20s | %-13s | %-30s | %-10s | %-10s | %-10s |\n";
-        String separator = "+-----------------+----------------------+--------------------------------+----------------------+------------+----------------------+----------------------+---------------+--------------------------------+------------+------------+------------+\n";
+        String format = "| %-15s | %-20s | %-30s | %-20s | %-10s | %-20s | %-20s | %-13s | %-30s | %-12s | %-12s | %-12s |\n";
+        String separator = "+-----------------+----------------------+--------------------------------+----------------------+------------+----------------------+----------------------+---------------+--------------------------------+--------------+--------------+--------------+\n";
 
         System.out.print(separator);
         System.out.format(format, "User ID", "User Name", "Email", "Full Name", "Status", "Password", "Avatar", "Phone", "Address", "Create Date", "Update Date", "Is Deleted");
@@ -219,18 +219,6 @@ public class User implements IOData, Serializable {
         do {
             String email = sc.nextLine();
             if (email.matches(regex)) {
-                boolean isExist = false;
-                for (int i = 0; i< UserService.userList.size(); i++){
-                    if (UserService.userList.get(i).getEmail().equals(email)) {
-                        isExist = true;
-                        break;
-                    }
-                }
-                if (!isExist) {
-                    return email;
-                }else {
-                    System.err.println("Email already exist. Try an other one!");
-                }
                 return email;
             }else {
                 System.err.println("Invalid email address (xxx@gmail.com). Try an other one!");
@@ -297,7 +285,6 @@ public class User implements IOData, Serializable {
                 }else {
                     System.err.println("Phone number already exist. Try an other one!");
                 }
-                return phone;
             }else {
                 System.err.println("Invalid phone number (0xxxxxxxx) (9 number). Try an other one!");
             }

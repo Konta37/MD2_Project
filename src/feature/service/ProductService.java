@@ -16,7 +16,7 @@ public class ProductService implements IProductFeature {
 
     @Override
     public void saveOrUpdate(Products products) {
-        int indexCheck = findIndexById(products.getCategoryId());
+        int indexCheck = findIndexById(products.getProductId());
         if (indexCheck < 0) {
             // chức năng thêm mới
             productsList.add(products);

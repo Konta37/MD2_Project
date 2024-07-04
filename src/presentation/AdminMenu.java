@@ -1,12 +1,10 @@
 package presentation;
 
-import entity.Category;
-import entity.Products;
-import entity.Role;
-import entity.RoleName;
+import entity.*;
 import feature.service.CategoryService;
 import feature.service.ProductService;
 import feature.service.RoleService;
+import feature.service.UserService;
 import utils.IOFile;
 
 import java.util.Scanner;
@@ -15,6 +13,7 @@ public class AdminMenu {
     static CategoryService categoryService = new CategoryService();
     static ProductService productService = new ProductService();
     static RoleService roleService = new RoleService();
+    static UserService userService = new UserService();
 
     public static void adminMenu(Scanner sc) {
         do {
@@ -166,10 +165,10 @@ public class AdminMenu {
             }
             switch (choose) {
                 case 1:
-
+                    addNewUser(sc);
                     break;
                 case 2:
-
+                    showAllUsers();
                     break;
                 case 3:
 
@@ -178,7 +177,7 @@ public class AdminMenu {
 
                     break;
                 case 5:
-
+                    searchUserByName(sc);
                     break;
                 case 6:
                     System.out.println("Exit user menu.");
@@ -270,7 +269,7 @@ public class AdminMenu {
             System.out.println("1. Update Category Name");
             System.out.println("2. Update Category Description");
             System.out.println("3. Update Category Status");
-            System.out.println("4. Quay lại");
+            System.out.println("4. Back");
             System.out.println("Your choice: ");
             int choice = inputNumber(sc);
             switch (choice) {
@@ -364,7 +363,14 @@ public class AdminMenu {
         System.out.println("Finish search Product by Name");
     }
 
-    public static void showAllUsers() {}
+    public static void showAllUsers() {
+        if (UserService.userList.isEmpty()) {
+            System.err.println("Empty User List");
+            return;
+        }
+        // method referance
+        UserService.userList.forEach(User::displayData);
+    }
 
     public static void showAllRoles() {
         for (Role role : RoleService.roleList) {
@@ -372,6 +378,28 @@ public class AdminMenu {
         }
     }
 
+    public static void addNewUser(Scanner sc) {
+        System.out.println("Enter number of Users you want to add: ");
+        int number = inputNumber(sc);
+        for (int i = 0; i < number; i++) {
+            User user = new User();
+            user.inputData();
+            userService.saveOrUpdate(user);
+        }
+    }
+
+    public static void searchUserByName(Scanner sc) {
+        System.out.println("Enter User Name to search: ");
+        String input = sc.nextLine();
+        int count=0;
+        for (int i = 0; i < UserService.userList.size(); i++) {
+            if (UserService.userList.get(i).getFullName().toLowerCase().contains(input.toLowerCase())) {
+                UserService.userList.get(i).displayData();
+                count++;
+            }
+        }
+        System.out.println("There are " + count + " users with the name " + input + ".");
+    }
 
     //in case you want to add
     public static void addRole(Scanner sc){

@@ -27,6 +27,7 @@ public class MainMenuManager {
                     AdminMenu.adminMenu(scanner);
                     break;
                 case 3:
+                    UserMenu.userMenu(scanner);
                     break;
                 case 4:
                     System.exit(0);

@@ -68,12 +68,24 @@ public class Address implements IOData,Serializable {
 
     @Override
     public void inputData() {
-
+        Scanner sc = new Scanner(System.in);
+        this.addressId = inputAddressId(sc);
+        this.userId = inputUserId(sc);
+        this.fullAddress = inputFullAddress(sc);
+        this.phone = inputPhone(sc);
+        this.receiveName = inputReceiveName(sc);
     }
 
     @Override
     public void displayData() {
+        String format = "| %-15s | %-20s | %-50s | %-10s | %-20s |\n";
+        String separator = "+-----------------+----------------------+----------------------------------------------------+------------+----------------------+\n";
 
+        // Print the header
+        System.out.print(separator);
+        System.out.format(format, "Address ID", "User ID", "Full Address", "Phone", "Receive Name");
+        System.out.print(separator);
+        System.out.format(format, this.addressId, this.userId, this.fullAddress, this.phone, this.receiveName);
     }
 
     private int inputAddressId(Scanner sc) {
@@ -99,9 +111,6 @@ public class Address implements IOData,Serializable {
                 for (int i =0; i< UserService.userList.size(); i++) {
                     if (UserService.userList.get(i).getUserId() == Integer.parseInt(input)) {
                         isExist = true;
-                        this.fullAddress = UserService.userList.get(i).getAddress();
-                        this.phone = UserService.userList.get(i).getPhone();
-                        this.receiveName = UserService.userList.get(i).getFullName();
                         break;
                     }
                 }
@@ -116,11 +125,42 @@ public class Address implements IOData,Serializable {
         }while (true);
     }
     
+    public String inputFullAddress(Scanner sc) {
+        System.out.println("Enter full address: ");
+        do {
+            String input = sc.nextLine();
+            if (!input.isEmpty()){
+                return input;
+            }else {
+                System.err.println("Input is empty. Try again.");
+            }
+        }while (true);
+    }
 
+    public String inputPhone(Scanner sc) {
+        System.out.println("Enter phone number: ");
+        String regex = "0\\d{8}";
+        do {
+            String phone = sc.nextLine();
+            if (phone.matches(regex)) {
+                return phone;
+            }else {
+                System.err.println("Invalid phone number (0xxxxxxxx) (9 number). Try an other one!");
+            }
+        }while (true);
+    }
 
-//    public String inputPhone(Scanner sc) {
-//
-//    }
+    public String inputReceiveName(Scanner sc) {
+        System.out.println("Enter receive name: ");
+        do {
+            String input = sc.nextLine();
+            if (!input.isEmpty()){
+                return input;
+            }else {
+                System.err.println("Input is empty. Try again.");
+            }
+        }while (true);
+    }
 
     public int findIndexById(int idFind) {
         for (int i = 0; i < AddressService.addressList.size(); i++) {
