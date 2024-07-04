@@ -7,6 +7,7 @@ import feature.service.RoleService;
 import feature.service.UserService;
 import utils.IOFile;
 
+import java.util.Date;
 import java.util.Scanner;
 
 public class AdminMenu {
@@ -126,10 +127,10 @@ public class AdminMenu {
                     showAllProducts(sc);
                     break;
                 case 3:
-
+                    updateProductById(sc);
                     break;
                 case 4:
-
+                    deleteProductById(sc);
                     break;
                 case 5:
                     searchProductById(sc);
@@ -191,12 +192,10 @@ public class AdminMenu {
     public static void orderMenu(Scanner sc) {
         do {
             System.out.println("➢ ===== ORDER MENU =====");
-            System.out.println("1. ");
-            System.out.println("2. ");
-            System.out.println("3. ");
-            System.out.println("4. ");
-            System.out.println("5. ");
-            System.out.println("6. Back");
+            System.out.println("1. Show All Orders");
+            System.out.println("2. Show Order Information by id");
+            System.out.println("3. Show Orders by Status");
+            System.out.println("4. Back");
             System.out.println("Your choice: ");
             int choose;
             try {
@@ -207,21 +206,15 @@ public class AdminMenu {
             }
             switch (choose) {
                 case 1:
-
+                    showAllOrders();
                     break;
                 case 2:
-
+                    showOrderInformation();
                     break;
                 case 3:
-
+                    showOrderByStatus(sc);
                     break;
                 case 4:
-
-                    break;
-                case 5:
-
-                    break;
-                case 6:
                     System.out.println("Exit user menu.");
                     return;
                 default:
@@ -314,6 +307,8 @@ public class AdminMenu {
         System.out.println("Finish search Category by ID");
     }
 
+
+    //=============================================Product=============================================
     public static void addNewProducts(Scanner sc) {
         System.out.println("Enter number of Products you want to add: ");
         int number = inputNumber(sc);
@@ -363,12 +358,78 @@ public class AdminMenu {
         System.out.println("Finish search Product by Name");
     }
 
+    public static void updateProductById(Scanner sc) {
+        System.out.println("Enter Product ID to update: ");
+        int idUpdate = inputNumber(sc);
+        int indexUpdate = productService.findIndexById(idUpdate);
+        if (indexUpdate < 0) {
+            System.err.println("Can not find id to update " + idUpdate);
+            return;
+        }
+        Products productUpdate = ProductService.productsList.get(indexUpdate);
+        boolean isLoop = true;
+        do {
+            System.out.println("1. Update Product Name");
+            System.out.println("2. Update Product Description");
+            System.out.println("3. Update Product Unit Price");
+            System.out.println("4. Update Product Stock Quantity");
+            System.out.println("5. Update Product Image");
+            System.out.println("6. Update Category Id in Product");
+            System.out.println("7. Back");
+            System.out.println("Your choice: ");
+            int choice = inputNumber(sc);
+            switch (choice) {
+                case 1:
+                    productUpdate.setProductName(productUpdate.inputProductName(sc));
+                    break;
+                case 2:
+                    productUpdate.setDescription(productUpdate.inputDescription(sc));
+                    break;
+                case 3:
+                    productUpdate.setUnitPrice(productUpdate.inputUnitPrice(sc));
+                    break;
+                case 4:
+                    productUpdate.setStockQuantity(productUpdate.inputStockQuantity(sc));
+                    break;
+                case 5:
+                    productUpdate.setProductImage(productUpdate.inputImage(sc));
+                    break;
+                case 6:
+                    productUpdate.setCategoryId(productUpdate.inputCateId(sc));
+                    break;
+                case 7:
+                    isLoop = false;
+                    break;
+                default:
+                    System.err.println("Please enter a valid choice. Try again.");
+            }
+        } while (isLoop);
+        //when you update -> date update need to change
+        productUpdate.setDateUpdated(new Date());
+        //finish update -> write to file
+        IOFile.writeToFile(IOFile.PATH_PRODUCT, ProductService.productsList);
+    }
+
+    public static void deleteProductById(Scanner sc) {
+        System.out.println("Enter Product ID to delete: ");
+        int idDelete = inputNumber(sc);
+        for (int i = 0; i < ProductService.productsList.size(); i++) {
+            if (ProductService.productsList.get(i).getProductId() == idDelete) {
+                ProductService.productsList.remove(i);
+                break;
+            }
+        }
+        System.out.println("Finish delete Product by ID");
+    }
+
+
+    //=============================================User=============================================
     public static void showAllUsers() {
         if (UserService.userList.isEmpty()) {
             System.err.println("Empty User List");
             return;
         }
-        // method referance
+        // method reference
         UserService.userList.forEach(User::displayData);
     }
 
@@ -412,6 +473,16 @@ public class AdminMenu {
         }
 
     }
+
+
+    //=================================Order===========================
+    public static void showAllOrders(){}
+
+    public static void showOrderInformation(){
+
+    }
+
+    public static void showOrderByStatus(Scanner sc){}
 
     public static int inputNumber(Scanner scanner) {
         do {

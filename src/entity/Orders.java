@@ -14,15 +14,7 @@ public class Orders implements IOData {
     private String serialNumber; //random UUID
     private int userId; //cant null
     private double totalPrice;
-
-    private enum status {
-        WAITING,
-        CONFIRM,
-        DELIVERY,
-        SUCCESS,
-        DENIED,
-    }
-
+    private OrderStatus orderStatus;
     private String note;
     private String receiveName;
     private String receivePhone;
@@ -32,11 +24,12 @@ public class Orders implements IOData {
     public Orders() {
     }
 
-    public Orders(int orderId, String serialNumber, int userId, double totalPrice, String note, String receiveName, String receivePhone, Date dateCreated, Date dateReceived) {
+    public Orders(int orderId, String serialNumber, int userId, double totalPrice, OrderStatus orderStatus, String note, String receiveName, String receivePhone, Date dateCreated, Date dateReceived) {
         this.orderId = orderId;
         this.serialNumber = serialNumber;
         this.userId = userId;
         this.totalPrice = totalPrice;
+        this.orderStatus = orderStatus;
         this.note = note;
         this.receiveName = receiveName;
         this.receivePhone = receivePhone;
@@ -74,6 +67,14 @@ public class Orders implements IOData {
 
     public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
     }
 
     public String getNote() {
@@ -197,4 +198,9 @@ public class Orders implements IOData {
 //            }
 //        }while (true);
 //    }
+
+    //Auto Waiting. Change at update order by admin
+    public OrderStatus inputOrderStatus(Scanner sc) {
+        return OrderStatus.valueOf("WAITING");
+    }
 }
