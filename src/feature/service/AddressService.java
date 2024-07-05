@@ -12,6 +12,10 @@ public class AddressService implements IAddressFeature {
 
     public static List<Address> addressList = new ArrayList<>();
 
+    static {
+        addressList = IOFile.readFromFile(IOFile.PATH_ADDRESS);
+    }
+
     public AddressService() {
         addressList = IOFile.readFromFile(IOFile.PATH_ADDRESS);
     }

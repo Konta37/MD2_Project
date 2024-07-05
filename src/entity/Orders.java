@@ -5,11 +5,15 @@ import feature.service.ProductService;
 import feature.service.UserService;
 import utils.IOData;
 
+import java.io.Serializable;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Scanner;
 import java.util.UUID;
 
-public class Orders implements IOData {
+public class Orders implements IOData, Serializable {
     private int orderId;
     private String serialNumber; //random UUID
     private int userId; //cant null
@@ -124,7 +128,33 @@ public class Orders implements IOData {
 
     @Override
     public void displayData() {
+        NumberFormat vndFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        // First line format
+        String formatLine1 = "| %-15s | %-40s | %-10s | %-15s | %-15s |\n";
+        String separatorLine1 = "+-----------------+------------------------------------------+------------+-----------------+-----------------+\n";
 
+        // Second line format
+        String formatLine2 = "| %-20s | %-20s | %-15s | %-20s | %-20s |\n";
+        String separatorLine2 = "+----------------------+----------------------+-----------------+----------------------+----------------------+\n";
+
+        // Print headers for the first line
+        System.out.print(separatorLine1);
+        System.out.printf(formatLine1, "Order ID", "Serial Number", "User ID", "Total Price", "Order Status");
+        System.out.print(separatorLine1);
+
+        // Print data for the first line
+        System.out.printf(formatLine1, orderId, serialNumber, userId, vndFormat.format(totalPrice), orderStatus);
+        System.out.print(separatorLine1);
+
+        // Print headers for the second line
+        System.out.print(separatorLine2);
+        System.out.printf(formatLine2, "Note", "Receive Name", "Receive Phone", "Date Created", "Date Received");
+        System.out.print(separatorLine2);
+
+        // Print data for the second line
+        System.out.printf(formatLine2, note, receiveName, receivePhone, sdf.format(dateCreated) , sdf.format(dateReceived));
+        System.out.print(separatorLine2);
     }
 
     private int inputOrderId() {
@@ -186,18 +216,6 @@ public class Orders implements IOData {
             }
         } while (true);
     }
-
-//    public double inputTotalPrice(Scanner sc){
-//        System.out.println("Please enter the total price: ");
-//        do{
-//            String totalPrice = sc.nextLine();
-//            try {
-//                if
-//            }catch (NumberFormatException e){
-//                System.err.println("Total price is not a number. Try again.");
-//            }
-//        }while (true);
-//    }
 
     //Auto Waiting. Change at update order by admin
     public OrderStatus inputOrderStatus(Scanner sc) {

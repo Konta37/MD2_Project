@@ -67,6 +67,13 @@ public class WishList implements IOData, Serializable {
         System.out.print(separator);
     }
 
+    //show wish list with user id
+    public void displayUserWishList(int userId){
+        if (userId == this.userId) {
+            displayData();
+        }
+    }
+
     private int inputWishListId(){
         int max = 0;
         if (WishListService.wishListArrayList.isEmpty()) {

@@ -11,6 +11,10 @@ import java.util.List;
 public class WishListService implements IWishListFeature {
     public static List<WishList> wishListArrayList = new ArrayList<>();
 
+    static {
+        wishListArrayList = IOFile.readFromFile(IOFile.PATH_WISHLIST);
+    }
+
     public WishListService() {
         wishListArrayList = IOFile.readFromFile(IOFile.PATH_WISHLIST);
     }
@@ -45,7 +49,7 @@ public class WishListService implements IWishListFeature {
     @Override
     public int findIndexById(int idFind) {
         for (int i = 0; i < wishListArrayList.size(); i++) {
-            if (wishListArrayList.get(i).getAddressId() == idFind) {
+            if (wishListArrayList.get(i).getWishListId() == idFind) {
                 return i;
             }
         }

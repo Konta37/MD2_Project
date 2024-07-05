@@ -9,6 +9,9 @@ import java.util.List;
 
 public class RoleService {
     public static List<Role> roleList = new ArrayList<Role>();
+    static {
+        roleList = IOFile.readFromFile(IOFile.PATH_ROLE);
+    }
     public RoleService() {
         roleList = IOFile.readFromFile(IOFile.PATH_ROLE);
     }

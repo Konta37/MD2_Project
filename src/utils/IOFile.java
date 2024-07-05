@@ -12,6 +12,8 @@ public class IOFile {
     public static final String PATH_ADDRESS = "src/data/address.txt";
     public static final String PATH_CART = "src/data/cart.txt";
     public static final String PATH_WISHLIST = "src/data/wishlist.txt";
+    public static final String PATH_ORDER = "src/data/order.txt";
+    public static final String PATH_ORDER_DETAILS = "src/data/orderdetails.txt";
 
 
     public static <T> void writeToFile(String path, List<T> list) {

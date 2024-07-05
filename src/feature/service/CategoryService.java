@@ -11,6 +11,10 @@ import java.util.List;
 public class CategoryService implements ICategoryFeature {
     public static List<Category> categoryList = new ArrayList<>();
 
+    static {
+        categoryList = IOFile.readFromFile(IOFile.PATH_CATEGORY);
+    }
+
     public CategoryService() {
         categoryList = IOFile.readFromFile(IOFile.PATH_CATEGORY);
     }

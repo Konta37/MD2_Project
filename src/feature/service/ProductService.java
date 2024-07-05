@@ -9,6 +9,10 @@ import java.util.List;
 
 public class ProductService implements IProductFeature {
     public static List<Products> productsList = new ArrayList<Products>();
+
+    static {
+        productsList = IOFile.readFromFile(IOFile.PATH_PRODUCT);
+    }
     
     public ProductService() {
         productsList = IOFile.readFromFile(IOFile.PATH_PRODUCT);

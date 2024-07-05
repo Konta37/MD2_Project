@@ -156,6 +156,26 @@ public class Products implements IOData, Serializable {
         }
     }
 
+    public void displayForCart(){
+        boolean isActive = categoryIsActive();
+        //check is Active is true -> product can be shown. And reverse
+        if (isActive && stockQuantity > 0){
+            // Currency formatter for VND
+            NumberFormat vndFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+            //date format
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            String format = "| %-12s | %-40s | %-20s | %-20s | %-12s |\n";
+            String separator = "+--------------+------------------------------------------+----------------------+----------------------+--------------+\n";
+
+            System.out.printf(separator);
+            System.out.format(format, "Product ID", "SKU", "Product Name", "Price", "Stock Qty");
+            System.out.format(format, productId, sku, productName, vndFormat.format(unitPrice), stockQuantity);
+
+            System.out.format(format, "Category ID", "Description", "Product Image", "Date Created", "Date Updated");
+            System.out.format(format, categoryId, description, productImage, sdf.format(dateCreated), sdf.format(dateUpdated));
+        }
+    }
+
     private int inputProductId() {
         int max = 0;
         if (ProductService.productsList.isEmpty()) {
