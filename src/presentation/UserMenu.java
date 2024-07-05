@@ -4,10 +4,7 @@ import entity.*;
 import feature.service.*;
 import utils.IOFile;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class UserMenu {
     static AddressService addressService = new AddressService();
@@ -470,11 +467,110 @@ public class UserMenu {
     public static void chooseShoppingCartToBuy(Scanner sc, int userId) {}
 
     public static void buyAllShoppingCart(Scanner sc, int userId) {
+        // Create a new Date object
+        Date currentDate = new Date();
+
+        // Print the current date
+        System.out.println("Current Date: " + currentDate);
+
+        // Create a Calendar object and set it to the current date
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentDate);
+
+        // Add 4 days to the current date
+        calendar.add(Calendar.DAY_OF_YEAR, 4);
+
+        // Get the updated date
+        Date newDate = calendar.getTime();
+
+        //first check user id has anything in cart
+        //second check user id has any address
+        double totalPrice = 0;
+        if (checkUserIdInShoppingCart(userId) && checkUserIdInAddressList(userId) && indexUserAddress(userId) >=0){
+            Orders orders = new Orders();
+
+            Orders newOrders = new Orders(
+                    orders.inputOrderId(),
+                    orders.inputSerialNumber(),
+                    userId,
+                    0, // Total price initialized to 0
+                    orders.inputOrderStatus(),
+                    "", // Note initialized to empty string
+                    AddressService.addressList.get(indexUserAddress(userId)).getReceiveName(),
+                    AddressService.addressList.get(indexUserAddress(userId)).getFullAddress(),
+                    AddressService.addressList.get(indexUserAddress(userId)).getPhone(),
+                    currentDate,
+                    newDate
+            );
+            //add order to list and add to file
+            orderService.saveOrUpdate(newOrders);
+            for (ShoppingCart shoppingCart : ShoppingCartService.shoppingCartList) {
+                if (shoppingCart.getUserId() == userId) {
+                    OrderDetails orderDetails = new OrderDetails(
+                            newOrders.getOrderId(),
+                            shoppingCart.getProductId(),
+                            nameProduct(shoppingCart.getProductId()),
+                            unitPriceProduct(shoppingCart.getProductId()),
+                            shoppingCart.getOrderQuantity()
+                    );
+                    orderDetailsService.saveOrUpdate(orderDetails);
+
+                }
+            }
+            System.out.println("Finish buy all products in cart.");
+        }else {
+            System.err.println("User with id " + userId + " does not have any shopping cart.");
+            System.err.println("Or User with id " + userId + " does not have any address to buy it.");
+        }
+    }
+
+    //check userId has anything in shopping cart
+    public static boolean checkUserIdInShoppingCart(int userId){
         for (int i = 0; i < ShoppingCartService.shoppingCartList.size(); i++) {
             if (ShoppingCartService.shoppingCartList.get(i).getUserId() == userId) {
-
+                return true;
             }
         }
+        return false;
+    }
+
+    //check user id has anything in cart
+    public static boolean checkUserIdInAddressList(int userId){
+        for (int i = 0; i < AddressService.addressList.size(); i++) {
+            if (AddressService.addressList.get(i).getUserId() == userId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //auto add first address of user
+    public static int indexUserAddress(int userId){
+        for (int i = 0; i < AddressService.addressList.size(); i++) {
+            if (AddressService.addressList.get(i).getUserId() == userId) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    //add Name
+    public static String nameProduct(int productId){
+        for (int i = 0; i < ProductService.productsList.size(); i++) {
+            if (ProductService.productsList.get(i).getProductId() == productId) {
+                return ProductService.productsList.get(i).getProductName();
+            }
+        }
+        return "";
+    }
+
+    public static double unitPriceProduct(int productId){
+        for (int i = 0; i < ProductService.productsList.size(); i++) {
+            if (ProductService.productsList.get(i).getProductId() == productId) {
+                return ProductService.productsList.get(i).getUnitPrice();
+            }
+        }
+        return 0;
     }
 
     //==================================Order======================================

@@ -7,7 +7,7 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 public class OrderDetails implements IOData, Serializable {
-    private int orderDetailId;
+    private int orderId;
     private int productId;
     private String productName;
     private double unitPrice;
@@ -16,20 +16,20 @@ public class OrderDetails implements IOData, Serializable {
     public OrderDetails() {
     }
 
-    public OrderDetails(int orderDetailId, int productId, String productName, double unitPrice, int orderQuantity) {
-        this.orderDetailId = orderDetailId;
+    public OrderDetails(int orderId, int productId, String productName, double unitPrice, int orderQuantity) {
+        this.orderId = orderId;
         this.productId = productId;
         this.productName = productName;
         this.unitPrice = unitPrice;
         this.orderQuantity = orderQuantity;
     }
 
-    public int getOrderDetailId() {
-        return orderDetailId;
+    public int getOrderId() {
+        return orderId;
     }
 
-    public void setOrderDetailId(int orderDetailId) {
-        this.orderDetailId = orderDetailId;
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
     }
 
     public int getProductId() {
@@ -78,7 +78,7 @@ public class OrderDetails implements IOData, Serializable {
         System.out.print(separator);
         System.out.printf(format, "Order ID", "Product ID", "Name", "Unit Price", "Order Quantity");
         System.out.print(separator);
-        System.out.printf(format, orderDetailId, productId, productName, vndFormat.format(unitPrice), orderQuantity);
+        System.out.printf(format, orderId, productId, productName, vndFormat.format(unitPrice), orderQuantity);
         System.out.print(separator);
     }
 }

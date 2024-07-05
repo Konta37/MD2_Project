@@ -19,7 +19,7 @@ public class OrderDetailsService implements IOrderDetailsFeature {
     
     @Override
     public void saveOrUpdate(OrderDetails orderDetails) {
-        int indexCheck = findIndexById(orderDetails.getOrderDetailId());
+        int indexCheck = findIndexById(orderDetails.getOrderId());
         if (indexCheck < 0) {
             // chức năng thêm mới
             orderDetailsList.add(orderDetails);
@@ -47,7 +47,7 @@ public class OrderDetailsService implements IOrderDetailsFeature {
     @Override
     public int findIndexById(int idFind) {
         for (int i = 0; i < orderDetailsList.size(); i++) {
-            if (orderDetailsList.get(i).getOrderDetailId() == idFind) {
+            if (orderDetailsList.get(i).getOrderId() == idFind) {
                 return i;
             }
         }

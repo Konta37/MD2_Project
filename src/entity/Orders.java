@@ -21,6 +21,7 @@ public class Orders implements IOData, Serializable {
     private OrderStatus orderStatus;
     private String note;
     private String receiveName;
+    private String receiveAddress;
     private String receivePhone;
     private Date dateCreated;
     private Date dateReceived;
@@ -28,7 +29,7 @@ public class Orders implements IOData, Serializable {
     public Orders() {
     }
 
-    public Orders(int orderId, String serialNumber, int userId, double totalPrice, OrderStatus orderStatus, String note, String receiveName, String receivePhone, Date dateCreated, Date dateReceived) {
+    public Orders(int orderId, String serialNumber, int userId, double totalPrice, OrderStatus orderStatus, String note, String receiveName, String receiveAddress, String receivePhone, Date dateCreated, Date dateReceived) {
         this.orderId = orderId;
         this.serialNumber = serialNumber;
         this.userId = userId;
@@ -36,6 +37,7 @@ public class Orders implements IOData, Serializable {
         this.orderStatus = orderStatus;
         this.note = note;
         this.receiveName = receiveName;
+        this.receiveAddress = receiveAddress;
         this.receivePhone = receivePhone;
         this.dateCreated = dateCreated;
         this.dateReceived = dateReceived;
@@ -95,6 +97,14 @@ public class Orders implements IOData, Serializable {
 
     public void setReceiveName(String receiveName) {
         this.receiveName = receiveName;
+    }
+
+    public String getReceiveAddress() {
+        return receiveAddress;
+    }
+
+    public void setReceiveAddress(String receiveAddress) {
+        this.receiveAddress = receiveAddress;
     }
 
     public String getReceivePhone() {
@@ -157,7 +167,7 @@ public class Orders implements IOData, Serializable {
         System.out.print(separatorLine2);
     }
 
-    private int inputOrderId() {
+    public int inputOrderId() {
         int max = 0;
         if (OrderService.ordersList.isEmpty()) {
             return 0;
@@ -218,7 +228,7 @@ public class Orders implements IOData, Serializable {
     }
 
     //Auto Waiting. Change at update order by admin
-    public OrderStatus inputOrderStatus(Scanner sc) {
+    public OrderStatus inputOrderStatus() {
         return OrderStatus.valueOf("WAITING");
     }
 }
