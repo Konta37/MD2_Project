@@ -30,7 +30,7 @@ public class OrderService implements IOrderFeature {
             ordersList.set(indexCheck, order);
             System.out.println("Update successfully");
         }
-        IOFile.writeToFile(IOFile.PATH_ADDRESS,ordersList);
+        IOFile.writeToFile(IOFile.PATH_ORDER,ordersList);
     }
 
     @Override
@@ -39,7 +39,7 @@ public class OrderService implements IOrderFeature {
         if (indexDelete >= 0) {
             ordersList.remove(indexDelete);
             System.out.println("Delete successfully");
-            IOFile.writeToFile(IOFile.PATH_ADDRESS,ordersList);
+            IOFile.writeToFile(IOFile.PATH_ORDER,ordersList);
         } else {
             System.err.println("Can't find order with id = " + idDelete);
         }

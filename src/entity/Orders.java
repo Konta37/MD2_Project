@@ -141,30 +141,29 @@ public class Orders implements IOData, Serializable {
         NumberFormat vndFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         // First line format
-        String formatLine1 = "| %-15s | %-40s | %-10s | %-15s | %-15s |\n";
-        String separatorLine1 = "+-----------------+------------------------------------------+------------+-----------------+-----------------+\n";
+        String formatLine1 = "| %-20s | %-43s | %-20s | %-20s | %-20s |\n";
+        String separatorLine1 = "+----------------------+---------------------------------------------+----------------------+----------------------+----------------------+\n";
+        //Second line format
+        String formatLine2 = "| %-20s | %-20s | %-20s | %-20s | %-20s | %-20s |\n";
+        String separatorLine2 = "+----------------------+----------------------+----------------------+----------------------+----------------------+----------------------+\n";
 
-        // Second line format
-        String formatLine2 = "| %-20s | %-20s | %-15s | %-20s | %-20s |\n";
-        String separatorLine2 = "+----------------------+----------------------+-----------------+----------------------+----------------------+\n";
-
-        // Print headers for the first line
         System.out.print(separatorLine1);
         System.out.printf(formatLine1, "Order ID", "Serial Number", "User ID", "Total Price", "Order Status");
         System.out.print(separatorLine1);
-
-        // Print data for the first line
         System.out.printf(formatLine1, orderId, serialNumber, userId, vndFormat.format(totalPrice), orderStatus);
         System.out.print(separatorLine1);
 
-        // Print headers for the second line
         System.out.print(separatorLine2);
-        System.out.printf(formatLine2, "Note", "Receive Name", "Receive Phone", "Date Created", "Date Received");
+        System.out.printf(formatLine2, "Note", "Receive Name", "Receive Address", "Receive Phone", "Date Created", "Date Received");
         System.out.print(separatorLine2);
+        System.out.printf(formatLine2, note, receiveName, receiveAddress, receivePhone, sdf.format(dateCreated), sdf.format(dateReceived));
+        System.out.print(separatorLine2);
+    }
 
-        // Print data for the second line
-        System.out.printf(formatLine2, note, receiveName, receivePhone, sdf.format(dateCreated) , sdf.format(dateReceived));
-        System.out.print(separatorLine2);
+    public void displayUserOrder(int userId){
+        if (userId == this.userId){
+            displayData();
+        }
     }
 
     public int inputOrderId() {

@@ -29,7 +29,7 @@ public class OrderDetailsService implements IOrderDetailsFeature {
             orderDetailsList.set(indexCheck, orderDetails);
             System.out.println("Update successfully");
         }
-        IOFile.writeToFile(IOFile.PATH_ADDRESS,orderDetailsList);
+        IOFile.writeToFile(IOFile.PATH_ORDER_DETAILS,orderDetailsList);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class OrderDetailsService implements IOrderDetailsFeature {
         if (indexDelete >= 0) {
             orderDetailsList.remove(indexDelete);
             System.out.println("Delete successfully");
-            IOFile.writeToFile(IOFile.PATH_ADDRESS,orderDetailsList);
+            IOFile.writeToFile(IOFile.PATH_ORDER_DETAILS,orderDetailsList);
         } else {
             System.err.println("Can't find order detail with id = " + idDelete);
         }

@@ -104,7 +104,7 @@ public class UserMenu {
         int id = inputNumber(sc);
         int count = 0;
         for (int i = 0; i < AddressService.addressList.size(); i++) {
-            if (AddressService.addressList.get(i).getUserId() == id){
+            if (AddressService.addressList.get(i).getUserId() == id) {
                 AddressService.addressList.get(i).displayData();
                 count++;
             }
@@ -142,7 +142,7 @@ public class UserMenu {
         System.out.println("Enter User ID to update: ");
         int idUpdate = inputNumber(sc);
         int indexUpdate = AdminMenu.userService.findIndexById(idUpdate);
-        if (indexUpdate < 0 ){
+        if (indexUpdate < 0) {
             System.err.println("Can not find User ID to update");
             return;
         }
@@ -190,8 +190,8 @@ public class UserMenu {
                 default:
                     System.err.println("Please enter a valid choice. Try again.");
             }
-        }while (isLoop);
-        if (numberOfActive>0){
+        } while (isLoop);
+        if (numberOfActive > 0) {
             userUpdate.setUpdateDate(new Date());
         }
         IOFile.writeToFile(IOFile.PATH_USER, UserService.userList);
@@ -202,13 +202,13 @@ public class UserMenu {
         int id = inputNumber(sc);
         boolean isExist = false;
         for (int i = 0; i < UserService.userList.size(); i++) {
-            if (UserService.userList.get(i).getUserId() == id){
+            if (UserService.userList.get(i).getUserId() == id) {
                 UserService.userList.get(i).displayData();
                 isExist = true;
                 break;
             }
         }
-        if (!isExist){
+        if (!isExist) {
             System.err.println("Can not find User ID to show");
         }
         System.out.println("Finish showing User Information");
@@ -251,7 +251,7 @@ public class UserMenu {
     }
 
     //show wish list with user id
-    public static void showAllWishList(Scanner sc){
+    public static void showAllWishList(Scanner sc) {
         System.out.println("Enter user id to show: ");
         int input = inputNumber(sc);
         if (WishListService.wishListArrayList.isEmpty()) {
@@ -262,7 +262,7 @@ public class UserMenu {
         WishListService.wishListArrayList.forEach(wishList -> wishList.displayUserWishList(input));
     }
 
-    public static void addProductToWishList(Scanner sc){
+    public static void addProductToWishList(Scanner sc) {
         //show all product for user to add product to wish list
         ProductService.productsList.forEach(Products::displayData);
         String separator = "+--------------+------------------------------------------+----------------------+----------------------+--------------+\n";
@@ -274,19 +274,19 @@ public class UserMenu {
         wishListService.saveOrUpdate(wishList);
     }
 
-    public static void deleteProductInWishListByProductId(Scanner sc){
+    public static void deleteProductInWishListByProductId(Scanner sc) {
         System.out.println("Enter User ID to delete Product in Wish List: ");
         int userId = inputNumber(sc);
         List<Integer> userWishList = new ArrayList<>();
         for (int i = 0; i < WishListService.wishListArrayList.size(); i++) {
-            if (WishListService.wishListArrayList.get(i).getUserId() == userId){
+            if (WishListService.wishListArrayList.get(i).getUserId() == userId) {
                 userWishList.add(i);
                 WishListService.wishListArrayList.get(i).displayData();
             }
         }
         System.out.println("Enter wish list id to delete (user : " + userId + ").");
         int wishListId = inputNumber(sc);
-        if (userWishList.isEmpty()){
+        if (userWishList.isEmpty()) {
             System.err.println("Can't find user Id.");
             return;
         }
@@ -297,9 +297,9 @@ public class UserMenu {
                 break;
             }
         }
-        if (isExist){
+        if (isExist) {
             wishListService.deleteById(wishListId);
-        }else {
+        } else {
             System.err.println("Can't find wish list Id.");
         }
         System.out.println("Finish deleting Product in Wish List with user id : " + userId);
@@ -415,7 +415,7 @@ public class UserMenu {
                 break;
             }
         }
-        if (isExist){
+        if (isExist) {
             System.out.println("Do you want to delete all user cart by product id : " + userId);
             do {
                 String isDelete = sc.nextLine();
@@ -424,19 +424,19 @@ public class UserMenu {
                     ShoppingCartService.shoppingCartList.removeIf(cart -> cart.getUserId() == userId);
                     System.out.println("Finish deleting all user cart with user id : " + userId);
                     return;
-                }else if (isDelete.equalsIgnoreCase("no")) {
+                } else if (isDelete.equalsIgnoreCase("no")) {
                     System.out.println("Exit funtion.");
                     return;
-                }else {
+                } else {
                     System.err.println("Invalid input (yes/no). Try again.");
                 }
-            }while(true);
+            } while (true);
         }
 
 
     }
 
-    public static void confirmToAddToOrder(Scanner sc){
+    public static void confirmToAddToOrder(Scanner sc) {
         System.out.println("Enter user id to show cart: ");
         int userId = inputNumber(sc);
 
@@ -461,17 +461,16 @@ public class UserMenu {
                 default:
                     System.out.println("Invalid choice. Try again.");
             }
-        }while (true);
+        } while (true);
     }
 
-    public static void chooseShoppingCartToBuy(Scanner sc, int userId) {}
+    public static void chooseShoppingCartToBuy(Scanner sc, int userId) {
+        System.out.println("Chua lam gi");
+    }
 
     public static void buyAllShoppingCart(Scanner sc, int userId) {
         // Create a new Date object
         Date currentDate = new Date();
-
-        // Print the current date
-        System.out.println("Current Date: " + currentDate);
 
         // Create a Calendar object and set it to the current date
         Calendar calendar = Calendar.getInstance();
@@ -486,7 +485,7 @@ public class UserMenu {
         //first check user id has anything in cart
         //second check user id has any address
         double totalPrice = 0;
-        if (checkUserIdInShoppingCart(userId) && checkUserIdInAddressList(userId) && indexUserAddress(userId) >=0){
+        if (checkUserIdInShoppingCart(userId) && checkUserIdInAddressList(userId) && indexUserAddress(userId) >= 0) {
             Orders orders = new Orders();
 
             Orders newOrders = new Orders(
@@ -495,37 +494,70 @@ public class UserMenu {
                     userId,
                     0, // Total price initialized to 0
                     orders.inputOrderStatus(),
-                    "", // Note initialized to empty string
+                    "note", // Note initialized to empty string
                     AddressService.addressList.get(indexUserAddress(userId)).getReceiveName(),
                     AddressService.addressList.get(indexUserAddress(userId)).getFullAddress(),
                     AddressService.addressList.get(indexUserAddress(userId)).getPhone(),
                     currentDate,
                     newDate
             );
-            //add order to list and add to file
-            orderService.saveOrUpdate(newOrders);
+            //add every cart id to order detail. When you add you also count add every unit price * quantity to total
             for (ShoppingCart shoppingCart : ShoppingCartService.shoppingCartList) {
                 if (shoppingCart.getUserId() == userId) {
-                    OrderDetails orderDetails = new OrderDetails(
-                            newOrders.getOrderId(),
-                            shoppingCart.getProductId(),
-                            nameProduct(shoppingCart.getProductId()),
-                            unitPriceProduct(shoppingCart.getProductId()),
-                            shoppingCart.getOrderQuantity()
-                    );
-                    orderDetailsService.saveOrUpdate(orderDetails);
+                    boolean isAvailable = true;
+                    //change product quantity in stock
+                    for (int i = 0; i < ProductService.productsList.size(); i++) {
+                        if (ProductService.productsList.get(i).getProductId() == shoppingCart.getProductId()) {
+                            if ( ProductService.productsList.get(i).getStockQuantity() - shoppingCart.getOrderQuantity() >=0){
+                                ProductService.productsList.get(i).setStockQuantity(
+                                        ProductService.productsList.get(i).getStockQuantity() - shoppingCart.getOrderQuantity()
+                                );
+                                IOFile.writeToFile(IOFile.PATH_PRODUCT, ProductService.productsList);
+                            }else {
+                                isAvailable = false;
+                                System.err.println("Product id: " + shoppingCart.getProductId() + " doesn't have enough in stock for you to buy. This product will be disable.");;
+                            }
+                        }
+                    }
+
+                    //if product has enough quantity for user to buy -> dd to order detail.
+                    if (isAvailable){
+                        OrderDetails orderDetails = new OrderDetails(
+                                newOrders.getOrderId(),
+                                shoppingCart.getProductId(),
+                                nameProduct(shoppingCart.getProductId()),
+                                unitPriceProduct(shoppingCart.getProductId()),
+                                shoppingCart.getOrderQuantity()
+                        );
+
+                        //counting total
+                        totalPrice = totalPrice + orderDetails.getUnitPrice() * orderDetails.getOrderQuantity();
+
+                        //saving orderDetail to List and file
+                        orderDetailsService.saveOrUpdate(orderDetails);
+                    }
 
                 }
             }
+            //add total after calculator to newOrder
+            newOrders.setTotalPrice(totalPrice);
+
+            //after count total we add order to list and add to file
+            orderService.saveOrUpdate(newOrders);
+
+            //after save done -> delete every cart with that user id
+            ShoppingCartService.shoppingCartList.removeIf(cart -> cart.getUserId() == userId);
+            IOFile.writeToFile(IOFile.PATH_CART, ShoppingCartService.shoppingCartList);
+
             System.out.println("Finish buy all products in cart.");
-        }else {
+        } else {
             System.err.println("User with id " + userId + " does not have any shopping cart.");
             System.err.println("Or User with id " + userId + " does not have any address to buy it.");
         }
     }
 
     //check userId has anything in shopping cart
-    public static boolean checkUserIdInShoppingCart(int userId){
+    public static boolean checkUserIdInShoppingCart(int userId) {
         for (int i = 0; i < ShoppingCartService.shoppingCartList.size(); i++) {
             if (ShoppingCartService.shoppingCartList.get(i).getUserId() == userId) {
                 return true;
@@ -535,7 +567,7 @@ public class UserMenu {
     }
 
     //check user id has anything in cart
-    public static boolean checkUserIdInAddressList(int userId){
+    public static boolean checkUserIdInAddressList(int userId) {
         for (int i = 0; i < AddressService.addressList.size(); i++) {
             if (AddressService.addressList.get(i).getUserId() == userId) {
                 return true;
@@ -545,7 +577,7 @@ public class UserMenu {
     }
 
     //auto add first address of user
-    public static int indexUserAddress(int userId){
+    public static int indexUserAddress(int userId) {
         for (int i = 0; i < AddressService.addressList.size(); i++) {
             if (AddressService.addressList.get(i).getUserId() == userId) {
                 return i;
@@ -555,7 +587,7 @@ public class UserMenu {
     }
 
     //add Name
-    public static String nameProduct(int productId){
+    public static String nameProduct(int productId) {
         for (int i = 0; i < ProductService.productsList.size(); i++) {
             if (ProductService.productsList.get(i).getProductId() == productId) {
                 return ProductService.productsList.get(i).getProductName();
@@ -564,7 +596,7 @@ public class UserMenu {
         return "";
     }
 
-    public static double unitPriceProduct(int productId){
+    public static double unitPriceProduct(int productId) {
         for (int i = 0; i < ProductService.productsList.size(); i++) {
             if (ProductService.productsList.get(i).getProductId() == productId) {
                 return ProductService.productsList.get(i).getUnitPrice();
@@ -577,11 +609,9 @@ public class UserMenu {
     public static void orderMenu(Scanner sc) {
         do {
             System.out.println("➢ ===== USER ORDER MENU =====");
-            System.out.println("1. ");
-            System.out.println("2. ");
-            System.out.println("3. ");
-            System.out.println("4. ");
-            System.out.println("5. Back");
+            System.out.println("1. Showing All Orders");
+            System.out.println("2. Showing Orders by Status");
+            System.out.println("3. Back");
             System.out.println("Your choice: ");
             int choose;
             try {
@@ -592,24 +622,34 @@ public class UserMenu {
             }
             switch (choose) {
                 case 1:
-
+                    showAllOrderByUserId(sc);
                     break;
                 case 2:
-
+                    showOrdersByStatusWithUserId(sc);
                     break;
                 case 3:
-
-                    break;
-                case 4:
-
-                    break;
-                case 5:
                     System.out.println("Exit User Menu");
                     return;
                 default:
                     System.out.println("Invalid choice. Try again.");
             }
         } while (true);
+    }
+
+    public static void showAllOrderByUserId(Scanner sc) {
+        System.out.println("Enter user id to show: ");
+        int input = inputNumber(sc);
+        if (OrderService.ordersList.isEmpty()) {
+            System.err.println("Empty Order List");
+            return;
+        }
+        // method reference
+        OrderService.ordersList.forEach(order -> order.displayUserOrder(input));
+        System.out.println("Finish Order List.");
+    }
+
+    public static void showOrdersByStatusWithUserId(Scanner sc) {
+        System.out.println("Chua lam");
     }
 
 
