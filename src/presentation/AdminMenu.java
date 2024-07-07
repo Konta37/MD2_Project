@@ -1,10 +1,7 @@
 package presentation;
 
 import entity.*;
-import feature.service.CategoryService;
-import feature.service.ProductService;
-import feature.service.RoleService;
-import feature.service.UserService;
+import feature.service.*;
 import utils.IOFile;
 
 import java.util.Date;
@@ -101,127 +98,7 @@ public class AdminMenu {
         } while (true);
     }
 
-    public static void productMenu(Scanner sc) {
-        do {
-            System.out.println("➢ ===== PRODUCT MENU =====");
-            System.out.println("1. Add number of Products");
-            System.out.println("2. Show all Products");
-            System.out.println("3. Edit Products");
-            System.out.println("4. Delete Products");
-            System.out.println("5. Search Products by ID");
-            System.out.println("6. Search Products by Name");
-            System.out.println("7. Back");
-            System.out.println("Your choice: ");
-            int choose;
-            try {
-                choose = Integer.parseInt(sc.nextLine());
-            } catch (NumberFormatException e) {
-                System.err.println("Invalid input. Try again.");
-                continue;
-            }
-            switch (choose) {
-                case 1:
-                    addNewProducts(sc);
-                    break;
-                case 2:
-                    showAllProducts(sc);
-                    break;
-                case 3:
-                    updateProductById(sc);
-                    break;
-                case 4:
-                    deleteProductById(sc);
-                    break;
-                case 5:
-                    searchProductById(sc);
-                    break;
-                case 6:
-                    searchProductByName(sc);
-                    break;
-                case 7:
-                    System.out.println("Exit product menu.");
-                    return;
-                default:
-                    System.out.println("Invalid choice. Try again.");
-            }
-        } while (true);
-    }
 
-    public static void userMenu(Scanner sc) {
-        do {
-            System.out.println("➢ ===== USER MENU =====");
-            System.out.println("1. Add number of User");
-            System.out.println("2. Show all User");
-            System.out.println("3. Edit User (?)");
-            System.out.println("4. Delete User (?)");
-            System.out.println("5. Search User by Name");
-            System.out.println("6. Back");
-            System.out.println("Your choice: ");
-            int choose;
-            try {
-                choose = Integer.parseInt(sc.nextLine());
-            } catch (NumberFormatException e) {
-                System.err.println("Invalid input. Try again.");
-                continue;
-            }
-            switch (choose) {
-                case 1:
-                    addNewUser(sc);
-                    break;
-                case 2:
-                    showAllUsers();
-                    break;
-                case 3:
-
-                    break;
-                case 4:
-
-                    break;
-                case 5:
-                    searchUserByName(sc);
-                    break;
-                case 6:
-                    System.out.println("Exit user menu.");
-                    return;
-                default:
-                    System.out.println("Invalid choice. Try again.");
-            }
-        } while (true);
-    }
-
-    public static void orderMenu(Scanner sc) {
-        do {
-            System.out.println("➢ ===== ORDER MENU =====");
-            System.out.println("1. Show All Orders");
-            System.out.println("2. Show Order Information by id");
-            System.out.println("3. Show Orders by Status");
-            System.out.println("4. Back");
-            System.out.println("Your choice: ");
-            int choose;
-            try {
-                choose = Integer.parseInt(sc.nextLine());
-            } catch (NumberFormatException e) {
-                System.err.println("Invalid input. Try again.");
-                continue;
-            }
-            switch (choose) {
-                case 1:
-                    showAllOrders();
-                    break;
-                case 2:
-                    showOrderInformation();
-                    break;
-                case 3:
-                    showOrderByStatus(sc);
-                    break;
-                case 4:
-                    System.out.println("Exit user menu.");
-                    return;
-                default:
-                    System.out.println("Invalid choice. Try again.");
-            }
-        } while (true);
-    }
 
     public static void addNewCategories(Scanner sc) {
         System.out.println("Enter number of Categories you want to add: ");
@@ -309,6 +186,52 @@ public class AdminMenu {
 
 
     //=============================================Product=============================================
+    public static void productMenu(Scanner sc) {
+        do {
+            System.out.println("➢ ===== PRODUCT MENU =====");
+            System.out.println("1. Add number of Products");
+            System.out.println("2. Show all Products");
+            System.out.println("3. Edit Products");
+            System.out.println("4. Delete Products");
+            System.out.println("5. Search Products by ID");
+            System.out.println("6. Search Products by Name");
+            System.out.println("7. Back");
+            System.out.println("Your choice: ");
+            int choose;
+            try {
+                choose = Integer.parseInt(sc.nextLine());
+            } catch (NumberFormatException e) {
+                System.err.println("Invalid input. Try again.");
+                continue;
+            }
+            switch (choose) {
+                case 1:
+                    addNewProducts(sc);
+                    break;
+                case 2:
+                    showAllProducts(sc);
+                    break;
+                case 3:
+                    updateProductById(sc);
+                    break;
+                case 4:
+                    deleteProductById(sc);
+                    break;
+                case 5:
+                    searchProductById(sc);
+                    break;
+                case 6:
+                    searchProductByName(sc);
+                    break;
+                case 7:
+                    System.out.println("Exit product menu.");
+                    return;
+                default:
+                    System.out.println("Invalid choice. Try again.");
+            }
+        } while (true);
+    }
+
     public static void addNewProducts(Scanner sc) {
         System.out.println("Enter number of Products you want to add: ");
         int number = inputNumber(sc);
@@ -424,6 +347,48 @@ public class AdminMenu {
 
 
     //=============================================User=============================================
+    public static void userMenu(Scanner sc) {
+        do {
+            System.out.println("➢ ===== USER MENU =====");
+            System.out.println("1. Add number of User");
+            System.out.println("2. Show all User");
+            System.out.println("3. Edit User (?)");
+            System.out.println("4. Delete User (?)");
+            System.out.println("5. Search User by Name");
+            System.out.println("6. Back");
+            System.out.println("Your choice: ");
+            int choose;
+            try {
+                choose = Integer.parseInt(sc.nextLine());
+            } catch (NumberFormatException e) {
+                System.err.println("Invalid input. Try again.");
+                continue;
+            }
+            switch (choose) {
+                case 1:
+                    addNewUser(sc);
+                    break;
+                case 2:
+                    showAllUsers();
+                    break;
+                case 3:
+
+                    break;
+                case 4:
+
+                    break;
+                case 5:
+                    searchUserByName(sc);
+                    break;
+                case 6:
+                    System.out.println("Exit user menu.");
+                    return;
+                default:
+                    System.out.println("Invalid choice. Try again.");
+            }
+        } while (true);
+    }
+
     public static void showAllUsers() {
         if (UserService.userList.isEmpty()) {
             System.err.println("Empty User List");
@@ -476,13 +441,127 @@ public class AdminMenu {
 
 
     //=================================Order===========================
-    public static void showAllOrders(){}
-
-    public static void showOrderInformation(){
-
+    public static void orderMenu(Scanner sc) {
+        do {
+            System.out.println("➢ ===== ORDER MENU =====");
+            System.out.println("1. Show All Orders");
+            System.out.println("2. Show Order Information by id");
+            System.out.println("3. Show Orders by Status");
+            System.out.println("4. Back");
+            System.out.println("Your choice: ");
+            int choose;
+            try {
+                choose = Integer.parseInt(sc.nextLine());
+            } catch (NumberFormatException e) {
+                System.err.println("Invalid input. Try again.");
+                continue;
+            }
+            switch (choose) {
+                case 1:
+                    showAllOrders();
+                    break;
+                case 2:
+                    showOrderInformation(sc);
+                    break;
+                case 3:
+                    showOrderByStatus(sc);
+                    break;
+                case 4:
+                    System.out.println("Exit user menu.");
+                    return;
+                default:
+                    System.out.println("Invalid choice. Try again.");
+            }
+        } while (true);
     }
 
-    public static void showOrderByStatus(Scanner sc){}
+
+    public static void showAllOrders(){
+        for (int i =0; i< OrderService.ordersList.size(); i++){
+            OrderService.ordersList.get(i).displayData();
+        }
+        System.out.println("Finish show all Orders");
+    }
+
+    public static void showOrderInformation(Scanner sc){
+        OrderService.ordersList.forEach(Orders::displayData);
+        System.out.println("Enter Order ID to show: ");
+        int input =inputNumber(sc);
+
+        for (int i = 0; i < OrderDetailsService.orderDetailsList.size(); i++) {
+            if (OrderDetailsService.orderDetailsList.get(i).getOrderId() == input) {
+                OrderDetailsService.orderDetailsList.get(i).displayData();
+            }
+        }
+
+        System.out.println("Finish showing Order Details with Order ID: " + input + ".");
+    }
+
+    public static void showOrderByStatus(Scanner sc){
+        if (OrderService.ordersList.isEmpty()) {
+            System.err.println("Empty Order List");
+            return;
+        }
+
+        do {
+            System.out.println("➢ ===== SHOW ORDER BY STATUS MENU =====");
+            System.out.println("1. Showing Waiting Orders");
+            System.out.println("2. Showing Confirm Orders ");
+            System.out.println("3. Showing Delivery Orders ");
+            System.out.println("4. Showing Success Orders ");
+            System.out.println("5. Showing Cancel Orders ");
+            System.out.println("6. Showing Denied Orders ");
+            System.out.println("7. Back");
+            System.out.println("Your choice: ");
+            String status = "";
+            int choose;
+            try {
+                choose = Integer.parseInt(sc.nextLine());
+            } catch (NumberFormatException e) {
+                System.err.println("Invalid input. Try again.");
+                continue;
+            }
+            switch (choose) {
+                case 1:
+                    status = "WAITING";
+                    showOrdersByStatus(status);
+                    break;
+                case 2:
+                    status = "CONFIRM";
+                    showOrdersByStatus(status);
+                    break;
+                case 3:
+                    status = "DELIVERY";
+                    showOrdersByStatus(status);
+                    break;
+                case 4:
+                    status = "SUCCESS";
+                    showOrdersByStatus(status);
+                    break;
+                case 5:
+                    status = "CANCEL";
+                    showOrdersByStatus(status);
+                    break;
+                case 6:
+                    status = "DENIED";
+                    showOrdersByStatus(status);
+                    break;
+                case 7:
+                    System.out.println("Exit User Menu");
+                    return;
+                default:
+                    System.out.println("Invalid choice. Try again.");
+            }
+        } while (true);
+    }
+
+    public static void showOrdersByStatus(String status) {
+        for (int i = 0; i < OrderService.ordersList.size(); i++) {
+            if (OrderService.ordersList.get(i).getOrderStatus() == OrderStatus.valueOf(status)){
+                OrderService.ordersList.get(i).displayData();
+            }
+        }
+    }
 
     public static int inputNumber(Scanner scanner) {
         do {

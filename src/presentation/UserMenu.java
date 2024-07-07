@@ -508,20 +508,21 @@ public class UserMenu {
                     //change product quantity in stock
                     for (int i = 0; i < ProductService.productsList.size(); i++) {
                         if (ProductService.productsList.get(i).getProductId() == shoppingCart.getProductId()) {
-                            if ( ProductService.productsList.get(i).getStockQuantity() - shoppingCart.getOrderQuantity() >=0){
+                            if (ProductService.productsList.get(i).getStockQuantity() - shoppingCart.getOrderQuantity() >= 0) {
                                 ProductService.productsList.get(i).setStockQuantity(
                                         ProductService.productsList.get(i).getStockQuantity() - shoppingCart.getOrderQuantity()
                                 );
                                 IOFile.writeToFile(IOFile.PATH_PRODUCT, ProductService.productsList);
-                            }else {
+                            } else {
                                 isAvailable = false;
-                                System.err.println("Product id: " + shoppingCart.getProductId() + " doesn't have enough in stock for you to buy. This product will be disable.");;
+                                System.err.println("Product id: " + shoppingCart.getProductId() + " doesn't have enough in stock for you to buy. This product will be disable.");
+                                ;
                             }
                         }
                     }
 
                     //if product has enough quantity for user to buy -> dd to order detail.
-                    if (isAvailable){
+                    if (isAvailable) {
                         OrderDetails orderDetails = new OrderDetails(
                                 newOrders.getOrderId(),
                                 shoppingCart.getProductId(),
@@ -649,7 +650,74 @@ public class UserMenu {
     }
 
     public static void showOrdersByStatusWithUserId(Scanner sc) {
-        System.out.println("Chua lam");
+        System.out.println("Enter user id to show: ");
+        int input = inputNumber(sc);
+        if (OrderService.ordersList.isEmpty()) {
+            System.err.println("Empty Order List");
+            return;
+        }
+
+
+        do {
+            System.out.println("➢ ===== SHOW ORDER BY STATUS MENU =====");
+            System.out.println("1. Showing Waiting Orders");
+            System.out.println("2. Showing Confirm Orders ");
+            System.out.println("3. Showing Delivery Orders ");
+            System.out.println("4. Showing Success Orders ");
+            System.out.println("5. Showing Cancel Orders ");
+            System.out.println("6. Showing Denied Orders ");
+            System.out.println("7. Back");
+            System.out.println("Your choice: ");
+            String status = "";
+            int choose;
+            try {
+                choose = Integer.parseInt(sc.nextLine());
+            } catch (NumberFormatException e) {
+                System.err.println("Invalid input. Try again.");
+                continue;
+            }
+            switch (choose) {
+                case 1:
+                    status = "WAITING";
+                    showOrdersByStatus(status);
+                    break;
+                case 2:
+                    status = "CONFIRM";
+                    showOrdersByStatus(status);
+                    break;
+                case 3:
+                    status = "DELIVERY";
+                    showOrdersByStatus(status);
+                    break;
+                case 4:
+                    status = "SUCCESS";
+                    showOrdersByStatus(status);
+                    break;
+                case 5:
+                    status = "CANCEL";
+                    showOrdersByStatus(status);
+                    break;
+                case 6:
+                    status = "DENIED";
+                    showOrdersByStatus(status);
+                    break;
+                case 7:
+                    System.out.println("Exit User Menu");
+                    return;
+                default:
+                    System.out.println("Invalid choice. Try again.");
+            }
+        } while (true);
+
+
+    }
+
+    public static void showOrdersByStatus(String status) {
+        for (int i = 0; i < OrderService.ordersList.size(); i++) {
+            if (OrderService.ordersList.get(i).getOrderStatus() == OrderStatus.valueOf(status)){
+                OrderService.ordersList.get(i).displayData();
+            }
+        }
     }
 
 
