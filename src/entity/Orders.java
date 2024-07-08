@@ -133,7 +133,7 @@ public class Orders implements IOData, Serializable {
 
     @Override
     public void inputData() {
-        Scanner sc = new Scanner(System.in);
+        //do nothing
     }
 
     @Override

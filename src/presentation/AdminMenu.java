@@ -372,10 +372,10 @@ public class AdminMenu {
                     showAllUsers();
                     break;
                 case 3:
-
+                    System.out.println("Chua lam");
                     break;
                 case 4:
-
+                    System.out.println("Chua lam ");
                     break;
                 case 5:
                     searchUserByName(sc);
