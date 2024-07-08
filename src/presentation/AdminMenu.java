@@ -99,7 +99,6 @@ public class AdminMenu {
     }
 
 
-
     public static void addNewCategories(Scanner sc) {
         System.out.println("Enter number of Categories you want to add: ");
         int number = inputNumber(sc);
@@ -417,7 +416,7 @@ public class AdminMenu {
     public static void searchUserByName(Scanner sc) {
         System.out.println("Enter User Name to search: ");
         String input = sc.nextLine();
-        int count=0;
+        int count = 0;
         for (int i = 0; i < UserService.userList.size(); i++) {
             if (UserService.userList.get(i).getFullName().toLowerCase().contains(input.toLowerCase())) {
                 UserService.userList.get(i).displayData();
@@ -428,7 +427,7 @@ public class AdminMenu {
     }
 
     //in case you want to add
-    public static void addRole(Scanner sc){
+    public static void addRole(Scanner sc) {
         System.out.println("Enter number of Role you want to add: ");
         int number = inputNumber(sc);
         for (int i = 0; i < number; i++) {
@@ -447,7 +446,8 @@ public class AdminMenu {
             System.out.println("1. Show All Orders");
             System.out.println("2. Show Order Information by id");
             System.out.println("3. Show Orders by Status");
-            System.out.println("4. Back");
+            System.out.println("4. Change Order Status");
+            System.out.println("5. Back");
             System.out.println("Your choice: ");
             int choose;
             try {
@@ -467,6 +467,9 @@ public class AdminMenu {
                     showOrderByStatus(sc);
                     break;
                 case 4:
+                    changeOrderStatus(sc);
+                    break;
+                case 5:
                     System.out.println("Exit user menu.");
                     return;
                 default:
@@ -476,17 +479,17 @@ public class AdminMenu {
     }
 
 
-    public static void showAllOrders(){
-        for (int i =0; i< OrderService.ordersList.size(); i++){
+    public static void showAllOrders() {
+        for (int i = 0; i < OrderService.ordersList.size(); i++) {
             OrderService.ordersList.get(i).displayData();
         }
         System.out.println("Finish show all Orders");
     }
 
-    public static void showOrderInformation(Scanner sc){
+    public static void showOrderInformation(Scanner sc) {
         OrderService.ordersList.forEach(Orders::displayData);
         System.out.println("Enter Order ID to show: ");
-        int input =inputNumber(sc);
+        int input = inputNumber(sc);
 
         for (int i = 0; i < OrderDetailsService.orderDetailsList.size(); i++) {
             if (OrderDetailsService.orderDetailsList.get(i).getOrderId() == input) {
@@ -497,7 +500,7 @@ public class AdminMenu {
         System.out.println("Finish showing Order Details with Order ID: " + input + ".");
     }
 
-    public static void showOrderByStatus(Scanner sc){
+    public static void showOrderByStatus(Scanner sc) {
         if (OrderService.ordersList.isEmpty()) {
             System.err.println("Empty Order List");
             return;
@@ -557,8 +560,36 @@ public class AdminMenu {
 
     public static void showOrdersByStatus(String status) {
         for (int i = 0; i < OrderService.ordersList.size(); i++) {
-            if (OrderService.ordersList.get(i).getOrderStatus() == OrderStatus.valueOf(status)){
+            if (OrderService.ordersList.get(i).getOrderStatus() == OrderStatus.valueOf(status)) {
                 OrderService.ordersList.get(i).displayData();
+            }
+        }
+    }
+
+    public static void changeOrderStatus(Scanner sc) {
+        OrderService.ordersList.forEach(Orders::displayData);
+        System.out.println("Enter Order ID to change: ");
+        int input = inputNumber(sc);
+        for (int i = 0; i < OrderService.ordersList.size(); i++) {
+            if (OrderService.ordersList.get(i).getOrderId() == input) {
+                System.out.println("Enter status: ");
+                while (true) {
+                    String status = sc.nextLine();
+                    if (status.equals("WAITING") || status.equals("CANCEL")) {
+                        System.out.println("Invalid input (CONFIRM/DELIVERY/SUCCESS/DENIED). Try again.");
+                        continue;
+                    }
+                    try {
+                        OrderStatus orderStatus = OrderStatus.valueOf(status);
+                        OrderService.ordersList.get(i).setOrderStatus(orderStatus);
+                        IOFile.writeToFile(IOFile.PATH_ORDER,OrderService.ordersList);
+                        System.out.println("Finish change Order Status");
+                        //Still not change quantity when admin choose denied status.
+                        return;
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("Invalid input (CONFIRM/DELIVERY/SUCCESS/DENIED). Try again.");
+                    }
+                }
             }
         }
     }

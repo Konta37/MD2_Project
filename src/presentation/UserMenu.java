@@ -482,6 +482,12 @@ public class UserMenu {
         // Get the updated date
         Date newDate = calendar.getTime();
 
+        //ask user to enter note
+        System.out.println("Enter note: ");
+        String note = sc.nextLine();
+
+        int indexUserAddressEnter = indexUserAddressEnter(userId,sc);
+
         //first check user id has anything in cart
         //second check user id has any address
         double totalPrice = 0;
@@ -494,10 +500,10 @@ public class UserMenu {
                     userId,
                     0, // Total price initialized to 0
                     orders.inputOrderStatus(),
-                    "note", // Note initialized to empty string
-                    AddressService.addressList.get(indexUserAddress(userId)).getReceiveName(),
-                    AddressService.addressList.get(indexUserAddress(userId)).getFullAddress(),
-                    AddressService.addressList.get(indexUserAddress(userId)).getPhone(),
+                    note, // Note initialized to empty string
+                    AddressService.addressList.get(indexUserAddressEnter).getReceiveName(),
+                    AddressService.addressList.get(indexUserAddressEnter).getFullAddress(),
+                    AddressService.addressList.get(indexUserAddressEnter).getPhone(),
                     currentDate,
                     newDate
             );
@@ -577,6 +583,25 @@ public class UserMenu {
         return false;
     }
 
+    public static int indexUserAddressEnter(int userId, Scanner sc) {
+        //ask user to enter your address
+        System.out.println("Show address");
+        for (int i = 0; i < AddressService.addressList.size(); i++) {
+            if (AddressService.addressList.get(i).getUserId() == userId) {
+                AddressService.addressList.get(i).displayData();
+            }
+        }
+        System.out.println("Enter your address id: ");
+        int addressId = inputNumber(sc);
+        //check if both userId and addressId same in list
+        for (int i = 0; i < AddressService.addressList.size(); i++) {
+            if (AddressService.addressList.get(i).getUserId() == userId && AddressService.addressList.get(i).getAddressId() == addressId) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     //auto add first address of user
     public static int indexUserAddress(int userId) {
         for (int i = 0; i < AddressService.addressList.size(); i++) {
@@ -610,9 +635,10 @@ public class UserMenu {
     public static void orderMenu(Scanner sc) {
         do {
             System.out.println("➢ ===== USER ORDER MENU =====");
-            System.out.println("1. Showing All Orders");
+            System.out.println("1. Showing All Orders by User id");
             System.out.println("2. Showing Orders by Status");
-            System.out.println("3. Back");
+            System.out.println("3. Cancel Order with id User");
+            System.out.println("4. Back");
             System.out.println("Your choice: ");
             int choose;
             try {
@@ -629,6 +655,9 @@ public class UserMenu {
                     showOrdersByStatusWithUserId(sc);
                     break;
                 case 3:
+                    cancelOrderWithUserId(sc);
+                    break;
+                case 4:
                     System.out.println("Exit User Menu");
                     return;
                 default:
@@ -714,8 +743,64 @@ public class UserMenu {
 
     public static void showOrdersByStatus(String status) {
         for (int i = 0; i < OrderService.ordersList.size(); i++) {
-            if (OrderService.ordersList.get(i).getOrderStatus() == OrderStatus.valueOf(status)){
+            if (OrderService.ordersList.get(i).getOrderStatus() == OrderStatus.valueOf(status)) {
                 OrderService.ordersList.get(i).displayData();
+            }
+        }
+    }
+
+    public static void cancelOrderWithUserId(Scanner sc) {
+        System.out.println("Enter user id to show order: ");
+        int input = inputNumber(sc);
+        if (OrderService.ordersList.isEmpty()) {
+            System.err.println("Empty Order List");
+            return;
+        }
+        // method reference
+        OrderService.ordersList.forEach(order -> order.displayUserOrder(input));
+        System.out.println("Enter order id to cancel");
+        int orderId = inputNumber(sc);
+        //Check if order id is WAITING status or not. If not -> cant change
+        for (int i = 0; i < OrderService.ordersList.size(); i++){
+            if (OrderService.ordersList.get(i).getOrderId() == orderId && OrderService.ordersList.get(i).getOrderStatus() != OrderStatus.WAITING){
+                System.err.println("This order id: " + orderId + " is not for you to change status (status is not Waiting).");
+                return;
+            }
+        }
+        //check if userid and orderId is the same input -> change status
+        for (int i = 0; i < OrderService.ordersList.size(); i++) {
+            if (OrderService.ordersList.get(i).getOrderId() == orderId && OrderService.ordersList.get(i).getUserId() == input) {
+                //change status of order
+                OrderService.ordersList.get(i).setOrderStatus(OrderStatus.CANCEL);
+                System.out.println("Finish Cancel Order with id " + orderId + " and user id " + input);
+
+                //change quantity of product
+                for (int j = 0; j < OrderDetailsService.orderDetailsList.size(); j++) {
+                    if (OrderDetailsService.orderDetailsList.get(i).getOrderId() == orderId) {
+
+                        //find product to change quantity
+                        //boolean check if in case admin had deleted that product
+                        boolean isExist = false;
+                        for (Products product : ProductService.productsList) {
+                            if (product.getProductId() == OrderDetailsService.orderDetailsList.get(i).getProductId()) {
+                                product.setStockQuantity(product.getStockQuantity() + OrderDetailsService.orderDetailsList.get(i).getOrderQuantity());
+                                isExist = true;
+
+                                System.out.println("Finish add more quantity product: " + product.getProductId());
+                                IOFile.writeToFile(IOFile.PATH_PRODUCT,ProductService.productsList);
+                                break;
+                            }
+                        }
+                        if (!isExist) {
+                            System.err.println("Product " +OrderDetailsService.orderDetailsList.get(i).getProductId() + " does not exist");
+                        }
+
+                    }
+                }
+
+                //write orderService file
+                IOFile.writeToFile(IOFile.PATH_ORDER,OrderService.ordersList);
+                break;
             }
         }
     }
